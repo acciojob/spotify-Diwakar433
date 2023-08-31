@@ -82,10 +82,6 @@ public class SpotifyRepository {
             albums.add(album);
 
             List<Album> list = new ArrayList<>();
-            if(list == null){
-                list = new ArrayList<>();
-
-            }
             list.add(album);
             artistAlbumMap.put(artist1 ,list);
             return album;
@@ -109,10 +105,6 @@ public class SpotifyRepository {
             song.setLikes(0);
 
             songs.add(song);
-
-//            List<Song> l = albumSongMap.get(album);
-//            l.add(song);
-//            albumSongMap.put(album,l);
 
             if(albumSongMap.containsKey(album)){
                 List<Song> l = albumSongMap.get(album);

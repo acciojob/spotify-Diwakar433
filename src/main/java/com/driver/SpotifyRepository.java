@@ -157,16 +157,17 @@ public class SpotifyRepository {
 
     public Playlist createPlaylistOnName(String mobile, String title, List<String> songTitles) throws Exception {
         User user = null;
-        for(User user1 :users){
-            if(user1.getMobile()== mobile){
-                user =user1;
+        for(User user1 : users){
+            if(user1.getMobile() == mobile){
+                user = user1;
                 break;
             }
         }
-        if(user ==null){
+
+        if(user == null){
             throw new Exception("User does not exist");
         }
-        else {
+        else{
             Playlist playlist = new Playlist();
             playlist.setTitle(title);
             playlists.add(playlist);
@@ -202,48 +203,43 @@ public class SpotifyRepository {
 
     public Playlist findPlaylist(String mobile, String playlistTitle) throws Exception {
         User user = null;
-        for(User user1 :users){
-            if(user1.getMobile()== mobile){
-                user =user1;
+        for(User user1:users){
+            if(user1.getMobile()==mobile){
+                user=user1;
                 break;
             }
         }
-        if(user ==null){
+        if(user==null)
             throw new Exception("User does not exist");
-        }
 
-//        find the playlist with given title
         Playlist playlist = null;
-
-        for(Playlist pl : playlists) {
-            if(pl.getTitle() == playlistTitle) {
-                playlist = pl;
+        for(Playlist playlist1:playlists){
+            if(playlist1.getTitle()==playlistTitle){
+                playlist=playlist1;
                 break;
             }
         }
-
-        if(playlist == null)
+        if(playlist==null)
             throw new Exception("Playlist does not exist");
 
         if(creatorPlaylistMap.containsKey(user))
             return playlist;
 
-        List<User> userList = playlistListenerMap.get(playlist);
-
-        for(User user1 : userList) {
-            if(user1 == user)
+        List<User> listener = playlistListenerMap.get(playlist);
+        for(User user1:listener){
+            if(user1==user)
                 return playlist;
         }
-        userList.add(user);
-        playlistListenerMap.put(playlist, userList);
+
+        listener.add(user);
+        playlistListenerMap.put(playlist,listener);
 
         List<Playlist> playlists1 = userPlaylistMap.get(user);
-        if(playlists1 == null) {
+        if(playlists1 == null){
             playlists1 = new ArrayList<>();
         }
         playlists1.add(playlist);
-
-        userPlaylistMap.put(user, playlists1);
+        userPlaylistMap.put(user,playlists1);
 
         return playlist;
 

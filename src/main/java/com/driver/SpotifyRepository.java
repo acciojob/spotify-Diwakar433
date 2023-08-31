@@ -51,32 +51,33 @@ public class SpotifyRepository {
 
     public Album createAlbum(String title, String artistName) {
 
-        Artist art = null;
-        for(Artist artist : artists) {
+        Artist artist = null;
+        for(Artist artist1 : artists) {
             if(artist.getName() == artistName) {
-                art = artist;
+                artist = artist1;
                 break;
             }
         }
 
-        if(art == null) {
-            Artist artist = new Artist(artistName);
+        if(artist == null) {
+            Artist artist2 = createArtist(artistName);
             Album album = new Album(title);
             albums.add(album);
 
             List<Album> list = new ArrayList<>();
             list.add(album);
-            artistAlbumMap.put(artist,list);
+            artistAlbumMap.put(artist2,list);
             return album;
         }
+        else {
+            Album album = new Album(title);
+            albums.add(album);
 
-        Album album = new Album(title);
-        albums.add(album);
-
-        List<Album> list = new ArrayList<>();
-        list.add(album);
-        artistAlbumMap.put(art ,list);
-        return album;
+            List<Album> list = new ArrayList<>();
+            list.add(album);
+            artistAlbumMap.put(artist, list);
+            return album;
+        }
     }
 
     public Song createSong(String title, String albumName, int length) throws Exception{
@@ -156,16 +157,15 @@ public class SpotifyRepository {
 
     public Playlist createPlaylistOnName(String mobile, String title, List<String> songTitles) throws Exception {
         User user = null;
-
-        for(User el : users) {
-            if(el.getMobile() == mobile) {
-                user = el;
+        for(User user1 : users) {
+            if(user1.getMobile() == mobile) {
+                user = user1;
                 break;
             }
         }
 
         if(user == null) {
-            throw new Exception("User does not exits");
+            throw new Exception("User does not exist");
         }
         else {
             Playlist playlist = new Playlist(title);
@@ -211,7 +211,7 @@ public class SpotifyRepository {
         }
 
         if(user == null) {
-            throw new Exception("User does not exits");
+            throw new Exception("User does not exist");
         }
 
 //        find the playlist with given title
@@ -261,7 +261,7 @@ public class SpotifyRepository {
         }
 
         if(user == null)
-            throw new Exception("User does not  exit");
+            throw new Exception("User does not  exist");
 
         Song song = null;
 
@@ -272,7 +272,7 @@ public class SpotifyRepository {
         }
 
         if(song == null)
-            throw new Exception("Song does not exit");
+            throw new Exception("Song does not exist");
 
         if(songLikeMap.containsKey(song)) {
             List<User> userList = songLikeMap.get(song);

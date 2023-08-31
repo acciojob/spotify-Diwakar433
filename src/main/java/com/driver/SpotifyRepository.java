@@ -54,73 +54,78 @@ public class SpotifyRepository {
     }
 
     public Album createAlbum(String title, String artistName) {
-
-        Artist artist = null;
-        for(Artist artist1 : artists) {
-            if(artist.getName() == artistName) {
-                artist = artist1;
+        Artist artist1 = null;
+        for(Artist artist : artists){
+            if(artist.getName()==artistName){
+                artist1 = artist;
                 break;
             }
         }
-
-        if(artist == null) {
-            artist = createArtist(artistName);
+        if(artist1 == null){
+            artist1 = createArtist(artistName);
             Album album = new Album();
             album.setTitle(title);
             album.setReleaseDate(new Date());
+
             albums.add(album);
 
             List<Album> list = new ArrayList<>();
             list.add(album);
-            artistAlbumMap.put(artist,list);
+            artistAlbumMap.put(artist1,list);
             return album;
         }
-        else {
+        else{
             Album album = new Album();
             album.setTitle(title);
             album.setReleaseDate(new Date());
+
             albums.add(album);
 
             List<Album> list = new ArrayList<>();
+            if(list == null){
+                list = new ArrayList<>();
+
+            }
             list.add(album);
-            artistAlbumMap.put(artist, list);
+            artistAlbumMap.put(artist1 ,list);
             return album;
         }
     }
 
     public Song createSong(String title, String albumName, int length) throws Exception{
-
         Album album = null;
-        for(Album album1 : albums) {
-            if(album1.getTitle() == albumName) {
-                album = album1;
+        for(Album album1:albums){
+            if(album1.getTitle()==albumName){
+                album=album1;
                 break;
             }
         }
-
-        if(album == null) {
+        if(album==null)
             throw new Exception("Album does not exist");
-        }
         else {
             Song song = new Song();
             song.setTitle(title);
             song.setLength(length);
             song.setLikes(0);
+
             songs.add(song);
 
-            if(albumSongMap.containsKey(album)) {
-                List<Song> list1 = albumSongMap.get(album);
-                list1.add(song);
-                albumSongMap.put(album, list1);
+//            List<Song> l = albumSongMap.get(album);
+//            l.add(song);
+//            albumSongMap.put(album,l);
+
+            if(albumSongMap.containsKey(album)){
+                List<Song> l = albumSongMap.get(album);
+                l.add(song);
+                albumSongMap.put(album,l);
+            }else{
+                List<Song> songList = new ArrayList<>();
+                songList.add(song);
+                albumSongMap.put(album,songList);
             }
-            else {
-                List<Song> list2 = new ArrayList<>();
-                list2.add(song);
-                albumSongMap.put(album, list2);
-            }
+
             return song;
         }
-
     }
 
     public Playlist createPlaylistOnLength(String mobile, String title, int length) throws Exception {
@@ -340,35 +345,34 @@ public class SpotifyRepository {
     }
 
     public String mostPopularArtist() {
-        Artist artist = null;
         int max = 0;
-        for(Artist artist1 : artists) {
-            if(artist1.getLikes() >= max) {
-                artist = artist1;
-                max = artist1.getLikes();
+        Artist artist1=null;
+
+        for(Artist artist:artists){
+            if(artist.getLikes()>=max){
+                artist1=artist;
+                max = artist.getLikes();
             }
         }
-
-        if(artist == null)
+        if(artist1==null)
             return null;
-        return artist.getName();
+        else
+            return artist1.getName();
     }
 
     public String mostPopularSong() {
+        int max = 0;
         Song song = null;
-        int maxlike = 0;
 
-        for(Song song1 : songs) {
-            if(song1.getLikes() >= maxlike) {
+        for (Song song1 : songLikeMap.keySet()) {
+            if (song1.getLikes() >= max) {
                 song = song1;
-                maxlike = song.getLikes();
+                max = song1.getLikes();
             }
         }
-
-        if(song == null)
+        if (song == null)
             return null;
-
-        return song.getTitle();
-
+        else
+            return song.getTitle();
     }
 }
